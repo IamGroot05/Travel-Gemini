@@ -6,14 +6,40 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
 import { Colors } from "@/constants/Colors";
 import { useRouter } from "expo-router";
 import { Ionicons } from '@expo/vector-icons';
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../configs/FirebaseConfig";
+import { useState } from "react";
+import { handelLoginError, notifyMessage, ToastType } from "@/utils/platformUtils";
 
 export default function signIn(): JSX.Element {
 
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
     const router = useRouter();
+
+    const onUserLogin = () => {
+      if(email === '' || password === ''){
+        alert('Please fill all the fields');
+        notifyMessage('Please fill all the fields',ToastType.SHORT);
+        return;
+      }
+      signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        alert('Login Successfully');
+        notifyMessage('Login Successfully',ToastType.TOP);
+        router.replace('/myTrip');
+        const user = userCredential.user;
+        console.log(user);
+      }).catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        handelLoginError(errorCode,errorMessage);
+      });
+    };
   return (
     <View style={styles.container}>
         <TouchableOpacity style={{marginBottom:'8%'}} onPress={()=>router.back()}>
@@ -38,19 +64,20 @@ export default function signIn(): JSX.Element {
         <View>
           <Text style={{ fontFamily: "Outfit", fontSize: 15 }}>Email</Text>
           <TextInput
+            onChangeText={(text) => setEmail(text)}
             style={styles.input}
             placeholder="Enter you'r email address"
           />
         </View>
         <View>
           <Text style={{ fontFamily: "Outfit", fontSize: 15 }}>Password</Text>
-          <TextInput placeholder="Enter you'r password"
+          <TextInput onChangeText={(pass) => setPassword(pass)} placeholder="Enter you'r password"
  secureTextEntry={true} style={styles.input} />
         </View>
         {/* Button Section */}
         <View style={{marginTop:30}}>
           {/* Sign In Button */}
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={onUserLogin}>
             <Text
               style={{
                 fontFamily: "product-sans",
