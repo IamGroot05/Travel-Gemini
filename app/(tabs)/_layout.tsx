@@ -13,7 +13,7 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors.button_primery,
         tabBarLabelStyle: {
             fontSize: 10,
-            fontFamily: 'Outfit-Semibold'},
+            fontFamily: 'Outfit-SemiBold'},
       }}>
         <Tabs.Screen name="myTrip" options={{
             tabBarLabel: 'My Trip',

@@ -42,7 +42,7 @@ export default function signUp(): JSX.Element {
         <TouchableOpacity style={{marginBottom:'8%'}} onPress={()=>router.replace('/sign-in')}>
             <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
-    <View style={styles.text_container}>
+    <View style={[styles.text_container,{marginBottom:35}]}>
       <Text style={{ fontFamily: "Outfit-Bold", fontSize: 30 }}>
         Create New Account
       </Text>

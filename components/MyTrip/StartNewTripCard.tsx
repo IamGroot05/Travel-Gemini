@@ -12,7 +12,7 @@ export default function StartNewTripCard() {
         <MaterialIcons name="wrong-location" size={34} color="black" />  
         <Text style={{fontFamily:'Outfit-Bold',fontSize:18}}>No Trips Planned Yet</Text>
         <Text style={{fontFamily:'Outfit',fontSize:14, textAlign:'center', color:Colors.Grey, marginTop:30}}>Looks like its time to plan a new travel experinecel Get Started below</Text>
-        <TouchableOpacity onPress={() => router.replace('create-trip/searchTrip')} style={{backgroundColor:Colors.button_primery, padding:10, borderRadius:10, marginTop:20}}>
+        <TouchableOpacity onPress={() => router.push('create-trip/searchTrip')} style={{backgroundColor:Colors.button_primery, padding:10, borderRadius:10, marginTop:20}}>
           <Text style={{fontFamily:'Outfit-Bold',color:'white'}}>Start New Trip</Text>
         </TouchableOpacity>
       </View>

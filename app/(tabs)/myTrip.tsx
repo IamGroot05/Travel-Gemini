@@ -1,7 +1,8 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import StartNewTripCard from '../../components/MyTrip/StartNewTripCard';
+import { router } from 'expo-router';
 
 export default function myTrip() {
     const [trips, setTrips] = React.useState([]);
@@ -9,7 +10,9 @@ export default function myTrip() {
     <View style={styles.container}>
        <View style={styles.header}>
         <Text style={styles.headText} >My Trips</Text>
-        <AntDesign name="pluscircle" size={30} color="black" />   
+        <TouchableOpacity onPress={() => router.push('create-trip/searchTrip')}>
+         <AntDesign name="pluscircle" size={30} color="black"/>   
+        </TouchableOpacity>
        </View> 
        {trips.length === 0 ? <StartNewTripCard /> : <Text>Trips</Text>}
     </View>
