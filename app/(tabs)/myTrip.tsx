@@ -10,7 +10,7 @@ export default function myTrip() {
     <View style={styles.container}>
        <View style={styles.header}>
         <Text style={styles.headText} >My Trips</Text>
-        <TouchableOpacity onPress={() => router.push('create-trip/searchTrip')}>
+        <TouchableOpacity onPress={() => router.push('create-trip/generateTrip')}>
          <AntDesign name="pluscircle" size={30} color="black"/>   
         </TouchableOpacity>
        </View> 

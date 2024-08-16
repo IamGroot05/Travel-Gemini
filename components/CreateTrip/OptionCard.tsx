@@ -13,7 +13,7 @@ export default function OptionCard({ option, selectedTravelers }: Props) {
   return (
     <View
       style={[{
-        padding: 25,
+        padding: '4%',
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -22,8 +22,8 @@ export default function OptionCard({ option, selectedTravelers }: Props) {
       },selectedTravelers?.id === option.id && {borderWidth: 2, borderColor: Colors.button_primery}]}
     >
       <View>
-        <Text style={{ fontFamily: 'Outfit-Bold', fontSize: getFontSize(20) }}>{option.title}</Text>
-        <Text style={{ fontFamily: 'Outfit', fontSize: getFontSize(16), color: Colors.Grey }}>
+        <Text style={{ fontFamily: 'Outfit-Bold', fontSize: getFontSize(18) }}>{option.title}</Text>
+        <Text style={{ fontFamily: 'Outfit', fontSize: getFontSize(14), color: Colors.Grey }}>
           {option.description}
         </Text>
       </View>

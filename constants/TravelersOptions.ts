@@ -9,7 +9,7 @@ export const TravelersOptions = [
     {
         id: 2,
         title: 'A Couple',
-        description: 'A couple looking for a romantic getaway',
+        description: 'Romantic getaway for two',
         icon: '🥂',
         people: '2 people',
     },
@@ -24,7 +24,7 @@ export const TravelersOptions = [
         id: 4,
         title: 'Friends',
         icon: '⛵',
-        description: 'A group of friends looking for an adventure',
+        description: 'Group adventure with friends',
         people: '5 to 10 people',
     },
 ];
@@ -47,9 +47,5 @@ export const BudgetOptions = [{
     description: 'High-end options',
     icon: '💎',
 },]
-// {
-//     id: 4,
-//     title: 'No Budget',
-//     description: 'The sky is the limit',
-//     icon: '🚀',
-// }]
+
+export const AI_PROMPT = 'Generate Travel Plan for Location: {location}, for {numberOfDays} Days and {numberOfNight} Night for {travelers} with a {budget} budget with a Flight details, Flight Price with Booking url, Hotels options list with HotelName, Hotel address, Price, hotel image url, geo coordinates, rating, descriptions and Places to visit nearby with placeName, Place Details, Place Image Url, Geo Coordinates, ticket Pricing, Time to travel each of the location for {noDays} days and {noNight} night with each day plan with best time to visit in JSON format.'
