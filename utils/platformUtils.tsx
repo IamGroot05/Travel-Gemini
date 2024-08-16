@@ -1,4 +1,9 @@
-import { ToastAndroid, Platform, Alert} from 'react-native';
+import { ToastAndroid, Platform, Alert, PixelRatio} from 'react-native';
+
+
+
+export const fontScale = PixelRatio.getFontScale();
+export const getFontSize = (size: number) => size / fontScale;
 
 export enum ToastType {
     SHORT = 0,
