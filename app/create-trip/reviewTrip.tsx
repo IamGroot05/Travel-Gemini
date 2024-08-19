@@ -27,6 +27,14 @@ export default function reviewTrip() {
       <Text style={{ fontFamily: 'Outfit-Bold', fontSize:getFontSize(35), marginTop:20}}>Review your trip</Text>
       <View style={{flexDirection:'column',marginTop:15}}>
         <Text style={{ fontFamily: 'Outfit-Bold', fontSize:getFontSize(18), marginTop:10}}>Before generating your trip, please review your selection</Text>
+         {/* Starting Details */}
+         <View style={{marginTop:20 , display:'flex',flexDirection:"row", alignItems:'center',gap: 20}}>
+         <Text style={{fontSize:30}}>🏡</Text>
+         <View>
+            <Text style={{ fontFamily: 'Outfit', fontSize:getFontSize(18), color:Colors.Grey}}>Departure </Text>
+            <Text style={{ fontFamily: 'Outfit-md', fontSize:getFontSize(20)}}>{tripData?.startingLocation}</Text>
+         </View>
+        </View>
         {/* Destination Details */}
         <View style={{marginTop:20 , display:'flex',flexDirection:"row", alignItems:'center',gap: 20}}>
          <Text style={{fontSize:30}}>📍</Text>

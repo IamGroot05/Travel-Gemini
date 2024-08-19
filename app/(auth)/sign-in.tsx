@@ -13,13 +13,21 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../configs/FirebaseConfig";
 import { useState } from "react";
 import { handelLoginError, notifyMessage, ToastType } from "@/utils/platformUtils";
+import Feather from '@expo/vector-icons/Feather';
 
 export default function signIn(): JSX.Element {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    // State variable to track password visibility
+    const [showPassword, setShowPassword] = useState(false);
 
     const router = useRouter();
+
+    // Function to toggle the password visibility state
+    const toggleShowPassword = () => {
+      setShowPassword(!showPassword);
+    };
 
     const onUserLogin = () => {
       if(email === '' || password === ''){
@@ -71,8 +79,15 @@ export default function signIn(): JSX.Element {
         </View>
         <View>
           <Text style={{ fontFamily: "Outfit", fontSize: 15 }}>Password</Text>
+          <TouchableOpacity onPress={toggleShowPassword} style={styles.Icon}>
+            {showPassword ?(
+              <Feather name="eye-off" size={22} color={Colors.Grey} />
+            ):(
+              <Feather name="eye" size={22} color={Colors.Grey} />
+            )}
+          </TouchableOpacity>
           <TextInput onChangeText={(pass) => setPassword(pass)} placeholder="Enter you'r password"
- secureTextEntry={true} style={styles.input} />
+ secureTextEntry={showPassword} style={styles.input} />
         </View>
         {/* Button Section */}
         <View style={{marginTop:30}}>
@@ -128,13 +143,26 @@ export const styles = StyleSheet.create({
     marginTop: 20,
   },
   input: {
+    position:'relative',
     fontFamily: "Outfit",
-    fontSize: 13,
+    fontSize: 14,
     width: "95%",
     padding: 10,
     borderRadius: 15,
     borderColor: Colors.Grey,
     borderWidth: 2,
+  },
+  textInput: {
+    flex: 1,
+    padding: 10,
+    fontSize: 15,
+  },
+  Icon: {
+    position:'absolute',
+    right:'6%',
+    top:'30%',
+    padding: 12,
+    zIndex: 1,
   },
   button: {
     backgroundColor: Colors.button_primery,
