@@ -121,12 +121,14 @@ export default function SearchTrip() {
 
 const styles = StyleSheet.create({
     searchWrapper: {
+        zIndex:-1,
         backgroundColor: Colors.background_primary,
         padding: 20,
         paddingTop: 90,
         height: '100%',
     },
     label: {
+        zIndex: -1,
         marginLeft: 8,
         marginBottom: 3,
         fontFamily: 'Outfit-md',
@@ -156,9 +158,10 @@ const styles = StyleSheet.create({
 
 const googlePlacesStyles = {
     textInputContainer: {
+        zIndex: -1,
         backgroundColor: '#F9F9F9',
         borderWidth: 2,
         borderColor: Colors.button_primery,
         borderRadius: 10,
     },
-};
+    listView: { position: 'absolute', top: 55, borderColor: Colors.Grey,borderTopWidth:1, borderLeftWidth: 1, borderRightWidth: 1, borderBottomWidth: 1, borderRadius: 4, },};
