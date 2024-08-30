@@ -1,10 +1,9 @@
-import { StyleSheet, Text, TextInput, View, TouchableOpacity } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigation, useRouter } from 'expo-router';
 import { Colors } from '../../constants/Colors';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { GooglePlacesAutocomplete, GooglePlacesAutocompleteRef } from 'react-native-google-places-autocomplete';
 import { TripDetailsContext } from '@/context/TripDetailsContext';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import * as Location from 'expo-location';
 import axios from 'axios';
 
@@ -16,6 +15,10 @@ export default function SearchTrip() {
     const [errorMsg, setErrorMsg] = useState<string>('');
     const navigation = useNavigation();
     const router = useRouter();
+    const startPlaceRef = useRef<GooglePlacesAutocompleteRef | null>(null);
+    const ToPlaceRef = useRef<GooglePlacesAutocompleteRef | null>(null);
+
+
 
     useEffect(() => {
         navigation.setOptions({
@@ -26,7 +29,7 @@ export default function SearchTrip() {
                 fontFamily: 'Outfit-Bold',
             },
         });        
-    }, []);
+    }, [navigation]);
 
     useEffect(() => {
         (async () => {
@@ -43,11 +46,10 @@ export default function SearchTrip() {
         })();
     }, []);
 
-    const handleLocationIconPress = async () => {
-        let location = await Location.getCurrentPositionAsync({});
-        setLocation(location);
-        fetchAddress(location);
-    };
+    // Step 2: Log and check if it is the first render
+    useEffect(() => {
+        startPlaceRef.current?.setAddressText(address)
+    });
 
     const fetchAddress = async (location: any) => {
         try {
@@ -59,10 +61,12 @@ export default function SearchTrip() {
             });
 
             if (response.data.results.length > 0) {
-                setAddress(response.data.results[0].formatted_address);
+                const fetchedAddress = response.data.results[0].formatted_address;
+                setAddress(fetchedAddress);
+
                 setTripData({
                     ...tripData,
-                    startingLocation: response.data.results[0].formatted_address
+                    startingLocation: fetchedAddress
                 });
             } else {
                 setAddress('No address found for these coordinates');
@@ -72,56 +76,73 @@ export default function SearchTrip() {
         }
     };
 
+    const handleLocationIconPress = async () => {
+        let location = await Location.getCurrentPositionAsync({});
+        setLocation(location);
+        fetchAddress(location);
+    };
+
+    const handelNextPageNavigation = () =>{
+        if(ToPlaceRef.current?.getAddressText() !== '' && startPlaceRef.current?.getAddressText() !== ''){
+            router.push('create-trip/selectTravelers');
+        }
+    }
+
     return (
         <View style={styles.searchWrapper}>
-            <Text style={styles.label}>From</Text>
-            <GooglePlacesAutocomplete
-                placeholder='🛬 Where to?'
-                fetchDetails={true}
-                styles={googlePlacesStyles}
-                onPress={(data, details = null) => {
-                    setTripData({
-                        ...tripData,
-                        tripTo: data.description,
-                        coordinates: details?.geometry.location,
-                        photoRef: (details as any)?.photos[0]?.photo_reference,
-                        url: details?.url,
-                    });
-                    router.push('create-trip/selectTravelers');
-                }}
-                query={{
-                    key: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY,
-                    language: 'en',
-                }}
-            />
-          
-            <Text style={styles.label}>Destination</Text>
-            <GooglePlacesAutocomplete
-                placeholder='🛬 Where to?'
-                fetchDetails={true}
-                styles={googlePlacesStyles}
-                onPress={(data, details = null) => {
-                    setTripData({
-                        ...tripData,
-                        tripTo: data.description,
-                        coordinates: details?.geometry.location,
-                        photoRef: (details as any)?.photos[0]?.photo_reference,
-                        url: details?.url,
-                    });
-                    router.push('create-trip/selectTravelers');
-                }}
-                query={{
-                    key: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY,
-                    language: 'en',
-                }}
-            />
+            <View style={{height:74}}>
+                <Text style={styles.label}>From</Text>
+                <GooglePlacesAutocomplete
+                    placeholder='🛫 Your city ?'
+                    fetchDetails={true}
+                    styles={googlePlacesStyles}
+                    ref={startPlaceRef}
+                    onPress={(data, details = null) => {
+                        setAddress(data.description)
+                        setTripData({
+                            ...tripData,
+                            startingLocation: data.description,
+                        });
+                        handelNextPageNavigation()
+                    }}
+                    query={{
+                        key: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY,
+                        language: 'en',
+                    }}
+                />
+            </View>
+           <View style={{height:74}}>
+                <Text style={styles.label}>Destination</Text>
+                <GooglePlacesAutocomplete
+                    placeholder='🛬 Where to ?'
+                    fetchDetails={true}
+                    styles={googlePlacesStyles}
+                    ref={ToPlaceRef}
+                    onPress={(data, details = null) => {
+                        setTripData({
+                            ...tripData,
+                            tripTo: data.description,
+                            coordinates: details?.geometry.location,
+                            photoRef: (details as any)?.photos[0]?.photo_reference,
+                            url: details?.url,
+                        });
+                        handelNextPageNavigation()
+                    }}
+                    query={{
+                        key: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY,
+                        language: 'en',
+                    }}
+                />
+           </View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     searchWrapper: {
-        zIndex:-1,
+        display:'flex',
+        gap:50,
+        zIndex: -1,
         backgroundColor: Colors.background_primary,
         padding: 20,
         paddingTop: 90,
@@ -164,4 +185,14 @@ const googlePlacesStyles = {
         borderColor: Colors.button_primery,
         borderRadius: 10,
     },
-    listView: { position: 'absolute', top: 55, borderColor: Colors.Grey,borderTopWidth:1, borderLeftWidth: 1, borderRightWidth: 1, borderBottomWidth: 1, borderRadius: 4, },};
+    listView: { 
+        position: 'absolute', 
+        top: 55, 
+        borderColor: Colors.Grey,
+        borderTopWidth: 1, 
+        borderLeftWidth: 1, 
+        borderRightWidth: 1, 
+        borderBottomWidth: 1, 
+        borderRadius: 4, 
+    },
+};

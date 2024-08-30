@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "React_Native_expo",
-    "slug": "React_Native_expo",
+    "name": "Travel Gemini",
+    "slug": "travel-gemini",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/App_Icon.svg",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
@@ -17,9 +17,10 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/App_Icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.soumya_ranjan_dash.React_Native_expo"
     },
     "web": {
       "bundler": "metro",
@@ -31,6 +32,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "c5e80755-8ca8-4708-b70e-146d1057bf20"
+      }
+    },
+    "owner": "soumya_ranjan_dash"
   }
 }
