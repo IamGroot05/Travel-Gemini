@@ -3,19 +3,26 @@ import React, { useEffect } from 'react'
 import { Colors } from '@/constants/Colors'
 import { getFontSize } from '@/utils/platformUtils'
 import { AI_PROMPT } from '@/constants/TravelersOptions'
+import { chatSession } from '@/configs/AiModelConfig'
 import { TripDetailsContext } from '@/context/TripDetailsContext'
+import { useRouter } from 'expo-router'
+import { doc, setDoc } from 'firebase/firestore'
+import { db, auth } from '@/configs/FirebaseConfig'
 
 export default function generateTrip() {
     const {tripData, setTripData} = React.useContext<any>(TripDetailsContext);
+    const user = auth.currentUser;
+    const route = useRouter();
     
     useEffect(()=>{
-        tripData&&GenerateAITripPrompt()
-    },[tripData])
+      GenerateAITripPrompt()
+    },[])
 
 
-    const GenerateAITripPrompt = () =>{
+    const GenerateAITripPrompt = async() =>{
         const FinalPrompt = AI_PROMPT
         .replace('{location}', tripData?.tripTo)
+        .replace('{fromLocation}',tripData?.startingLocation)
         .replace('{numberOfDays}',tripData?.totalNoDays)
         .replace('{numberOfNight}',tripData?.totalNoDays-1+'')
         .replace('{travelers}',tripData?.travelerCount?.title)
@@ -24,6 +31,21 @@ export default function generateTrip() {
         .replace('{noNight}',tripData?.totalNoDays-1+'')
         
         console.log(FinalPrompt);
+
+        const result = await chatSession.sendMessage(FinalPrompt)
+        console.log(result.response.text());
+
+        const tripResponse = JSON.parse(result.response.text());
+        const docId = (Date.now()).toString();
+        const _result = await setDoc(doc(db,"UserTrips",docId),{
+          userEmail: user?.email,
+          tripPlane: tripResponse, // AI Response
+          tripData: JSON.stringify(tripData),
+          docId
+        })
+
+        route.push('/(tabs)/myTrip')
+
     }
   return (
     <View style={{paddingTop:60,padding:10,backgroundColor:Colors.background_primary,height:'100%'}}>

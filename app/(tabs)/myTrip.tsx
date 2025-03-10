@@ -1,11 +1,27 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import StartNewTripCard from '../../components/MyTrip/StartNewTripCard';
 import { router } from 'expo-router';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { auth, db } from '@/configs/FirebaseConfig';
 
 export default function myTrip() {
-    const [trips, setTrips] = React.useState([]);
+    const [trips, setTrips] = React.useState<any>([]);
+    const [loading, setLoading] = useState(false);
+    const user = auth.currentUser;
+
+    const GetMyTrip = async() => {
+      setLoading(true);
+      setTrips([]);
+      const q = query(collection(db,'UserTrips'),where('UserEmail', '==', user?.email))
+      const querySnapshot = await getDocs(q);
+
+      querySnapshot.forEach(docs => {
+        setTrips(prev => [...prev, docs.data()])
+      });
+      setLoading(false);
+    }
   return (
     <View style={styles.container}>
        <View style={styles.header}>
